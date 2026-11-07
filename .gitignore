@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+xpixelmap/data/
+camera/
+captures/
+fw/
+out/
+*.pdf
+graphify-out/

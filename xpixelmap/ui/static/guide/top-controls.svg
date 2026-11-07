@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 230" role="img" aria-labelledby="t">
+  <title id="t">X-T1 top controls: shutter button, shutter speed dial, ISO dial, focus switch</title>
+  <style>
+    .body { fill: #1e2228; stroke: #9aa3ad; stroke-width: 2; }
+    .detail { fill: #171a1f; stroke: #9aa3ad; stroke-width: 1.6; }
+    .accent { fill: none; stroke: #4f9cf9; stroke-width: 2.4; }
+    .accent-fill { fill: #4f9cf9; fill-opacity: .16; stroke: #4f9cf9; stroke-width: 2.2; }
+    .leader { fill: none; stroke: #4f9cf9; stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .dot { fill: #4f9cf9; }
+    text { fill: #e8eaed; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 11px; }
+    .muted { fill: #9aa3ad; font-size: 9.5px; }
+    .lbl { fill: #4f9cf9; font-weight: 650; }
+  </style>
+
+  <!-- body -->
+  <path class="body" d="M35 94 Q35 72 52 72 H288 Q305 72 305 94 V178 Q305 195 288 195 H52 Q35 195 35 178 Z"/>
+  <path class="detail" d="M122 72 V54 Q122 46 133 46 H198 Q209 46 209 54 V72"/>
+  <circle class="detail" cx="165" cy="145" r="42"/>
+  <circle class="detail" cx="165" cy="145" r="31"/>
+
+  <!-- shutter button -->
+  <rect class="accent-fill" x="67" y="61" width="26" height="13" rx="4"/>
+  <ellipse class="accent" cx="80" cy="61" rx="13" ry="4.5"/>
+
+  <!-- shutter speed dial -->
+  <rect class="detail" x="107" y="52" width="37" height="18" rx="4"/>
+  <ellipse class="detail" cx="125" cy="52" rx="18" ry="5.5"/>
+  <text class="muted" x="125" y="72" text-anchor="middle">T</text>
+
+  <!-- ISO dial -->
+  <rect class="detail" x="214" y="47" width="42" height="21" rx="4"/>
+  <ellipse class="detail" cx="235" cy="47" rx="21" ry="6"/>
+  <text class="muted" x="235" y="66" text-anchor="middle">ISO</text>
+
+  <!-- focus mode selector -->
+  <circle class="accent-fill" cx="286" cy="158" r="10"/>
+  <path class="accent" d="M286 150 V142"/>
+
+  <!-- labels -->
+  <text x="14" y="22">Shutter button</text>
+  <path class="leader" d="M62 28 L74 56"/>
+  <circle class="dot" cx="74" cy="56" r="2.4"/>
+
+  <text x="143" y="18">Shutter dial &#8594; T</text>
+  <path class="leader" d="M180 24 L129 49"/>
+  <circle class="dot" cx="129" cy="49" r="2.4"/>
+
+  <text x="252" y="22">ISO dial</text>
+  <path class="leader" d="M250 30 L238 44"/>
+  <circle class="dot" cx="238" cy="44" r="2.4"/>
+
+  <text x="196" y="224">Focus switch &#8594; M</text>
+  <path class="leader" d="M250 214 L283 168"/>
+  <circle class="dot" cx="283" cy="168" r="2.4"/>
+</svg>

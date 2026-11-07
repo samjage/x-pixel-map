@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X Pixel Map</title>
+<link rel="icon" type="image/svg+xml" href="/static/x-pixel-map.svg">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img class="logo" src="/static/x-pixel-map.svg" alt="">X Pixel Map <span id="model" class="sub">No camera</span><span id="sim" class="badge sim" hidden>SIMULATION</span></div>
+  <div class="status">
+    <span id="cam" class="pill">Camera</span>
+    <span id="img" class="pill holds">In camera —</span>
+    <span id="rb" class="pill dim" hidden></span>
+  </div>
+  <div id="controls" class="controls" aria-label="Session actions"></div>
+</header>
+<div id="progress" class="progress" aria-hidden="true"><i id="prog"></i></div>
+<div id="lockbar" class="lockbar" role="status" hidden></div>
+<section id="home" class="home" aria-label="Home menu" hidden>
+  <div id="home-cards" class="home-cards"></div>
+</section>
+<section id="about" class="about" aria-label="How X Pixel Map works" hidden>
+  <div class="about-wrap">
+    <header class="about-head">
+      <div class="about-lead">
+        <div class="phase-l">How it works</div>
+        <h1>Fixing a hot pixel, in plain words</h1>
+        <p class="why">A hot pixel is one tiny spot on the sensor that leaks a little charge, so it shows up as a bright
+          dot in dark parts of a photo. This tool does what Fujifilm's factory pixel mapping does: it adds that spot to
+          the camera's own list of faulty pixels, so the camera can leave it out of every photo. It does not change the
+          sensor, the firmware or your photos.</p>
+      </div>
+      <div class="about-facts">
+        <div><b>Changes</b><span>Only the camera's pixel-repair tables</span></div>
+        <div><b>Never touches</b><span>Firmware, photos or the memory card</span></div>
+        <div><b>Before saving</b><span>Everything is read back and compared</span></div>
+      </div>
+    </header>
+
+    <div class="about-grid">
+      <nav class="about-toc" aria-label="On this page">
+        <a href="#about-what">What a hot pixel is</a>
+        <a href="#about-camera">What the camera already does</a>
+        <a href="#about-changes">What this tool changes</a>
+        <a href="#about-session">How a session works</a>
+        <a href="#about-focus">Why focus pixels differ</a>
+        <a href="#about-limits">What it cannot do</a>
+        <a href="#about-tech">Technical details</a>
+        <a href="#about-words">Words used in the app</a>
+      </nav>
+
+      <article class="about-body">
+        <section id="about-what" class="about-sec">
+          <h2><span class="num">1</span> What a hot pixel is</h2>
+          <div class="about-cols">
+            <div>
+              <p>Your camera's sensor is a grid of millions of tiny light sensors, called photosites. Each one turns light
+                into an electrical signal. A normal photosite reads almost nothing in the dark. A <b>hot pixel</b> leaks a
+                little charge anyway, so it reads brighter than its neighbours even when no light reaches it.</p>
+              <p>The result is a small bright dot. It stays in the same place from photo to photo, usually becomes more
+                obvious at higher ISO settings and in long exposures, and is easiest to see in the dark parts of a picture.</p>
+              <p>A hot pixel is not dust. Dust sits on the sensor cover, can move when you clean the sensor, and often looks
+                soft or dark. A hot pixel is a fixed coordinate on the sensor, and cleaning will not remove it. A
+                <b>dead pixel</b> is the opposite: it reads too low, so it can look like a dark dot.</p>
+            </div>
+            <figure class="about-fig">
+              <div class="sensor-demo" aria-hidden="true"><span class="hotspot" style="left: 46%; top: 38%"></span></div>
+              <figcaption>A dark frame with one hot pixel. Every square is one photosite; the red dot is the leak.</figcaption>
+            </figure>
+          </div>
+          <div class="about-callout"><b>The important part:</b> the camera already knows how to hide a pixel it has been
+            told about. The missing piece on the X-T1 is a menu for telling it.</div>
+        </section>
+
+        <section id="about-camera" class="about-sec">
+          <h2><span class="num">2</span> What the camera already does</h2>
+          <p>Inside the camera is a small configuration image. Among other things, it holds lists of defective-pixel
+            coordinates. When the camera saves a photo, it checks those lists and replaces each listed pixel with a value
+            built from the pixels around it. That is Fujifilm's own pixel mapping, and it is why a repaired camera does
+            not simply show a black hole where the bad pixel was.</p>
+          <p>At the factory, the camera is pointed at a dark scene, the worst pixels are measured, and their coordinates
+            are written into those lists. Some later Fujifilm bodies have a <b>Pixel Mapping</b> menu that repeats this at
+            home. The X-T1 does not, so Fujifilm's answer is a paid service visit.</p>
+          <div class="about-example">
+            <div class="le">
+              <div class="lk">The camera's list (simplified)</div>
+              <table class="about-table compact">
+                <thead><tr><th>X</th><th>Y</th><th>What it means</th></tr></thead>
+                <tbody>
+                  <tr><td>2317</td><td>1649</td><td>replace this pixel from its neighbours</td></tr>
+                  <tr><td>2497</td><td>1861</td><td>replace this pixel from its neighbours</td></tr>
+                  <tr><td>…</td><td>…</td><td>the rest of the factory's entries</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="le">
+              <div class="lk">When a photo is saved</div>
+              <div class="around"><span class="good">120</span><span class="bad">904</span><span class="good">118</span><span class="good">121</span><span class="good">119</span></div>
+              <p class="hint">The listed pixel reads <b>904</b>; the camera replaces it using the values around it. The
+                photo is written normally, and the repair is invisible in the file.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="about-changes" class="about-sec">
+          <h2><span class="num">3</span> What this tool changes</h2>
+          <p>X Pixel Map reads that configuration image from your own camera, checks it, and builds a new copy with only
+            the defect tables edited. It then writes the whole image back, reads it back, and compares it byte for byte.
+            Nothing else in the image is allowed to differ from your own backup.</p>
+          <table class="about-table">
+            <thead><tr><th>Part of the camera's configuration image</th><th>Changed?</th></tr></thead>
+            <tbody>
+              <tr><td>The pixel lists: the coordinates of faulty pixels</td><td class="yes">Yes, the pixels you approve are added</td></tr>
+              <tr><td>The count fields that say how many entries each list holds</td><td class="yes">Yes, kept consistent with the lists</td></tr>
+              <tr><td>The focus-pixel correction table, used by autofocus</td><td class="yes">Only when a focus-sensor pixel is the problem</td></tr>
+              <tr><td>Five bytes that switch the camera's raw correction on at every shutter speed</td><td class="yes">Yes, up to ISO 1000 the factory leaves it off at short speeds</td></tr>
+              <tr><td>The save marker and the bytes the camera's own save command writes</td><td class="no">No, checked to stay exactly as the camera leaves them</td></tr>
+              <tr><td>Everything else in the 4,325,376-byte image</td><td class="no">No, checked byte for byte against your backup</td></tr>
+              <tr><td>The firmware, boot ROM, photos and memory card</td><td class="no">Never touched at all</td></tr>
+            </tbody>
+          </table>
+          <div class="about-cards">
+            <div><b>First, a backup</b><span>The untouched configuration image is read and locked before anything is built.</span></div>
+            <div><b>Then, your approval</b><span>The exact new image is shown with a short ID. Nothing is written until you approve that ID.</span></div>
+            <div><b>Then, proof</b><span>After writing, the camera is restarted and the whole image is read back. It must match exactly.</span></div>
+            <div><b>Always, undo</b><span>Every saved image is kept, so an earlier one can be put back with the same checks.</span></div>
+          </div>
+        </section>
+
+        <section id="about-session" class="about-sec">
+          <h2><span class="num">4</span> How a session works</h2>
+          <div class="route-flow about-route">
+            <span class="rf">Connect</span><span class="rfa">→</span><span class="rf">Save settings</span><span class="rfa">→</span>
+            <span class="rf">Find</span><span class="rfa">→</span><span class="rf">Review</span><span class="rfa">→</span>
+            <span class="rf">Build</span><span class="rfa">→</span><span class="rf">Write</span><span class="rfa">→</span>
+            <span class="rf">Check</span>
+          </div>
+          <ol class="about-steps">
+            <li><b>Connect and save your menu settings.</b> The camera is read in normal mode first. Service mode resets
+              the clock and menu settings, so the tool saves them and puts them back at the end.</li>
+            <li><b>Find.</b> The tool takes five dark frames with the lens cap on at each of six settings, from ISO 200
+              at 1/4 s to ISO 1250 at 4 s, plus an evenly lit white frame. These are the settings where a full test of every
+              ISO showed the most hot pixels. Each frame is judged on its own, because a pixel can look fine in four frames
+              and jump in the fifth. The white frame catches pixels that are only wrong under light.</li>
+            <li><b>Review.</b> Each candidate is shown with a close-up, its coordinates and a plain-language reason. A pixel is ticked for you if it reads over 100 above its neighbours
+              in every frame, or jumps over 200 in single frames at more than one setting. You can untick any of them, or tick a faint one by hand. Pixels at the very
+              edge, and pixels the camera already lists but that still show, are reported but cannot be fixed here.</li>
+            <li><b>Build.</b> The new image is built offline. The tool checks that only the allowed tables changed, then
+              runs it through an emulated copy of the camera's own firmware to prove the write path. That needs Fujifilm's
+              firmware file, which you add once on the home screen; it stays on your computer.</li>
+            <li><b>Write.</b> You approve the exact image ID, put the camera into service mode, and the tool writes it. It
+              then restarts the camera and reads the whole image back to prove the camera kept it.</li>
+            <li><b>Check.</b> Fresh dark frames are compared with the ones from the start. The report shows each pixel
+              before and after, so you can see what actually changed on your camera.</li>
+          </ol>
+          <div class="about-callout"><b>Why the mechanical shutter?</b> The guided run asks for the mechanical shutter
+            (or Mechanical + Electronic), which is what the tool now tests with. Electronic frames on this camera are
+            recorded with coarser steps and can show leaks that your normal photos would not. If a dark frame comes back
+            electronic, the run stops and says so rather than mixing the two.</div>
+        </section>
+
+        <section id="about-focus" class="about-sec">
+          <h2><span class="num">5</span> Why focus pixels are different</h2>
+          <p>Some pixels on the sensor are not just for taking pictures: they are also used by the autofocus system to
+            detect phase. They are called <b>phase-detect</b> or <b>focus-sensor</b> pixels. Adding one to the ordinary
+            defect list is not the right fix, because the camera also needs that pixel's signal for focusing.</p>
+          <p>For a hot focus pixel, the tool instead changes one small correction table that controls how much of a focus
+            pixel's own signal the camera trusts. Setting that value to zero stops the hot value from being passed on,
+            while the surrounding focus information still works. Because the table covers every focus pixel at once, there
+            is nothing to tick: the tool applies it automatically when it finds such a pixel.</p>
+          <p>The white frame is used as a sanity check here. Focus sites should read about the same as ordinary pixels
+            under even light; if they do not, the report says so.</p>
+        </section>
+
+        <section id="about-limits" class="about-sec">
+          <h2><span class="num">6</span> What it cannot do</h2>
+          <ul class="about-list">
+            <li><b>It does not repair the sensor.</b> It changes how the camera records the affected pixels. A physically
+              damaged sensor, dust, or a cracked cover glass needs different work.</li>
+            <li><b>It cannot list every pixel.</b> The camera's lists have a usable area, and a pixel at the very edge of
+              the frame is reported but left alone.</li>
+            <li><b>It leaves twitchy pixels alone.</b> At high ISO many pixels flare up for a moment and settle again, a
+              different set each time, so a list cannot catch them. A pixel seen at only one setting is shown as faint and is
+              not ticked by default; you can still choose to list one. Faint pixels under about 100 stay, too.</li>
+            <li><b>Its effect on fine detail is not proven yet.</b> Running the raw correction at short speeds clears the
+              bright pixels in dark frames, but it has not been checked on real photos. You can roll back at any time.</li>
+            <li><b>It is for one camera and firmware.</b> This release is built and tested for the FUJIFILM X-T1 on
+              firmware 5.52, on Linux. Other bodies and systems are planned, not supported yet.</li>
+            <li><b>It needs your approval.</b> The tool never writes by itself, never writes a different image from the one
+              you approved, and never assumes an interrupted write finished.</li>
+          </ul>
+        </section>
+
+        <section id="about-tech" class="about-sec">
+          <h2><span class="num">7</span> Technical details, for the curious</h2>
+          <details class="about-details">
+            <summary>The exact places in the configuration image</summary>
+            <p>The configuration image is 4,325,376 bytes (<code>0x420000</code>). The guided tool is allowed to change:</p>
+            <ul class="about-list">
+              <li>the pixel lists <code>list0</code> at <code>0x76800</code> and <code>list2</code> at <code>0x11c840</code>;</li>
+              <li>the count fields from <code>0x28e0</code> to <code>0x2904</code>;</li>
+              <li>the focus correction bytes <code>0x113b6</code> to <code>0x113d1</code> (28 bytes), set to zero only when needed;</li>
+              <li>the save bytes at <code>0x80</code> to <code>0xa0</code>, which the camera's own save command writes.</li>
+            </ul>
+            <p>Everything else is checked: image markers, the list-reload flag, the USB debug flag, the lens-profile block
+              at <code>0x3e0000</code> to <code>0x3fffff</code>, and every other byte. If anything else differs, the tool
+              refuses to write. The full list is in the project's <code>README.md</code>.</p>
+          </details>
+          <details class="about-details">
+            <summary>What "read back" means</summary>
+            <p>Writing to the camera is only half of it. After the write and a power cycle, the tool reads the entire
+              image out again and compares it with what it sent. Only a full match counts as success. The read-back copy
+              is saved as a locked backup too, and Roll back can put it back.</p>
+          </details>
+        </section>
+
+        <section id="about-words" class="about-sec">
+          <h2><span class="num">8</span> Words used in the app</h2>
+          <dl class="about-gloss">
+            <dt>Hot pixel</dt><dd>A pixel that reads too bright in the dark, usually more obvious at high ISO or in long exposures.</dd>
+            <dt>Dead pixel</dt><dd>A pixel that reads too dark, even under light.</dd>
+            <dt>Dark frame</dt><dd>A photo taken with the lens cap on. Any brightness in it is the camera's own leak, not light from the scene.</dd>
+            <dt>White frame</dt><dd>A photo of an evenly lit white screen. It shows pixels that are too bright or too dark only under light.</dd>
+            <dt>Defect list</dt><dd>The camera's own list of pixel coordinates that it replaces when saving a photo.</dd>
+            <dt>Focus pixel</dt><dd>A pixel also used by phase-detect autofocus. It gets the correction-table treatment instead of a list entry.</dd>
+            <dt>Pixel map</dt><dd>The configuration image holding the defect lists. "In camera" means a pixel map has been read from the camera and saved.</dd>
+            <dt>Read-back</dt><dd>Reading the whole image out of the camera after a write and comparing it with what was sent.</dd>
+            <dt>Roll back</dt><dd>Putting an earlier locked pixel map back into the camera, with the same approval and read-back checks.</dd>
+          </dl>
+        </section>
+
+        <p class="about-foot">This page explains the idea. The step-by-step procedure is in <code>PROCEDURE.md</code>, and the
+          exact byte ranges and safety checks are in <code>README.md</code> and <code>xpixelmap/README.md</code> in the
+          project folder.</p>
+      </article>
+    </div>
+  </div>
+</section>
+<main id="session" class="layout" hidden>
+  <nav id="steps" class="steps" aria-label="Session route"></nav>
+  <section class="stage">
+    <div id="card" class="card"></div>
+    <details id="logbox" class="logbox">
+      <summary><span class="logtitle">Activity</span><span id="loglast" class="loglast"></span></summary>
+      <ol id="log"></ol>
+    </details>
+  </section>
+  <aside class="guide">
+    <h3>Camera guide</h3>
+    <div id="guidebody"></div>
+  </aside>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

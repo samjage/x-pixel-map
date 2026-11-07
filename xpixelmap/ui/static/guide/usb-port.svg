@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" role="img" aria-labelledby="t">
+  <title id="t">X-T1 left side cover: microphone/remote, HDMI and micro USB sockets</title>
+  <style>
+    .body { fill: #1e2228; stroke: #9aa3ad; stroke-width: 2; }
+    .port { fill: #0f1114; stroke: #9aa3ad; stroke-width: 1.8; }
+    .accent { fill: #4f9cf9; fill-opacity: .14; stroke: #4f9cf9; stroke-width: 2.4; }
+    .cable { fill: none; stroke: #4f9cf9; stroke-width: 2.4; }
+    .leader { fill: none; stroke: #4f9cf9; stroke-width: 1.4; stroke-dasharray: 3 3; }
+    .dot { fill: #4f9cf9; }
+    text { fill: #e8eaed; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 11px; }
+    .muted { fill: #9aa3ad; font-size: 9.5px; }
+    .lbl { fill: #4f9cf9; font-weight: 650; }
+  </style>
+
+  <!-- side cover -->
+  <rect class="body" x="22" y="14" width="88" height="172" rx="12"/>
+  <line x1="34" y1="26" x2="34" y2="174" stroke="#2a2f37" stroke-width="2"/>
+  <circle cx="30" cy="24" r="1.8" fill="#9aa3ad"/>
+  <circle cx="30" cy="176" r="1.8" fill="#9aa3ad"/>
+
+  <!-- microphone / remote -->
+  <circle class="port" cx="66" cy="48" r="7"/>
+
+  <!-- HDMI -->
+  <path class="port" d="M54 83 H78 L84 91 V102 L78 110 H54 L48 102 V91 Z"/>
+
+  <!-- micro USB (highlighted) -->
+  <path class="accent" d="M55 132 H77 L82 139 V151 L77 158 H55 L50 151 V139 Z"/>
+  <rect x="60" y="140" width="13" height="9" rx="2" fill="none" stroke="#4f9cf9" stroke-width="1.4"/>
+
+  <!-- cable plug -->
+  <rect class="accent" x="86" y="140" width="13" height="9" rx="2"/>
+  <path class="cable" d="M99 144 C112 144 112 176 132 176 H150"/>
+
+  <!-- labels -->
+  <text x="124" y="50">Mic / remote</text>
+  <path class="leader" d="M120 47 H75"/>
+  <circle class="dot" cx="75" cy="47" r="2.2"/>
+
+  <text x="124" y="92">HDMI</text>
+  <path class="leader" d="M120 89 H86"/>
+  <circle class="dot" cx="86" cy="89" r="2.2"/>
+
+  <text class="lbl" x="124" y="141">Micro USB</text>
+  <text class="muted" x="124" y="155">connect the cable here</text>
+  <path class="leader" d="M120 138 H84"/>
+  <circle class="dot" cx="84" cy="138" r="2.2"/>
+
+  <text class="muted" x="22" y="196">left side, under the cover</text>
+</svg>

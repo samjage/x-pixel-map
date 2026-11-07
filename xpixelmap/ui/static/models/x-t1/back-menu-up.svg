@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 250" width="640" height="250"><defs>
+ <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a404a"/><stop offset=".55" stop-color="#262a31"/><stop offset="1" stop-color="#1a1d22"/></linearGradient>
+ <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a616c"/><stop offset="1" stop-color="#30353d"/></linearGradient>
+ <radialGradient id="dial" cx=".45" cy=".35" r=".75"><stop offset="0" stop-color="#2f343c"/><stop offset=".7" stop-color="#1c1f24"/><stop offset="1" stop-color="#121418"/></radialGradient>
+ <radialGradient id="glass" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#2b3a52"/><stop offset=".6" stop-color="#121820"/><stop offset="1" stop-color="#0a0d12"/></radialGradient>
+ <pattern id="leather" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#1b1e23"/><circle cx="2" cy="2" r=".9" fill="#23272d"/><circle cx="5" cy="5" r=".8" fill="#202328"/></pattern>
+ <filter id="sh" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#000" flood-opacity=".55"/></filter>
+</defs><style>
+ .edge{fill:none;stroke:#8f99a5;stroke-width:1.4;opacity:.55}
+ .m{fill:#b6bec8;font:600 13px ui-sans-serif,system-ui,sans-serif;text-anchor:middle;dominant-baseline:central}
+ .mo{fill:#4f9cf9;font:800 16px ui-sans-serif,system-ui,sans-serif;text-anchor:middle;dominant-baseline:central}
+ .lab{fill:#7f8893;font:700 11px ui-sans-serif,system-ui,sans-serif;text-anchor:middle;letter-spacing:.12em}
+ .note{fill:#9aa3ad;font:600 13px ui-sans-serif,system-ui,sans-serif;text-anchor:middle}
+ .cap{fill:#e8eaed;font:650 17px ui-sans-serif,system-ui,sans-serif;text-anchor:middle}
+ .hl{fill:none;stroke:#4f9cf9;stroke-width:4}
+ .hlf{fill:#4f9cf9}
+ .glow{fill:none;stroke:#4f9cf9;stroke-width:12;opacity:.18}
+ .pulse{animation:p 1.6s ease-in-out infinite}
+ @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+</style><circle cx="170" cy="120" r="74" fill="url(#metal)" stroke="#8f99a5" stroke-width="1.4"/><circle cx="170" cy="120" r="30" fill="url(#dial)" stroke="#8f99a5"/><text class="lab" x="170" y="117">MENU</text><text class="lab" x="170" y="131">OK</text><path d="M164 170 L176 170 L170 177 Z" fill="#4a525d" transform="rotate(0 170 170)"/><path d="M114 120 L126 120 L120 120 Z" fill="#4a525d" transform="rotate(-90 120 120)"/><path d="M214 120 L226 120 L220 120 Z" fill="#4a525d" transform="rotate(90 220 120)"/><path class="hlf" d="M126 111 L126 129 L114 120 Z"/><circle class="glow pulse" cx="120.0" cy="120.0" r="20.0"/><circle class="hl pulse" cx="120.0" cy="120.0" r="20.0"/><text class="mo" x="120" y="154">1 Left</text><path class="hlf" d="M161 76 L179 76 L170 64 Z"/><circle class="glow pulse" cx="170.0" cy="70.0" r="20.0"/><circle class="hl pulse" cx="170.0" cy="70.0" r="20.0"/><text class="mo" x="170" y="38">2 Up</text><text class="note" x="170" y="230">MENU, then Left, then Up</text><rect x="340" y="40" width="260" height="160" rx="10" fill="#0b0e12" stroke="#5d6570"/><rect x="352" y="56" width="236" height="30" rx="6" fill="transparent" stroke="none"/><text class="m" x="470" y="71" style="font-size:13px">SHOOTING MENU</text><rect x="352" y="92" width="236" height="30" rx="6" fill="transparent" stroke="none"/><text class="m" x="470" y="107" style="font-size:13px">SET-UP</text><rect x="352" y="128" width="236" height="30" rx="6" fill="transparent" stroke="none"/><text class="m" x="470" y="143" style="font-size:13px">…</text><rect x="352" y="164" width="236" height="30" rx="6" fill="#173356" stroke="#4f9cf9"/><text class="mo" x="470" y="179" style="font-size:15px">USB MODE</text><text class="note" x="470" y="230">USB MODE → PC SHOOT AUTO</text></svg>

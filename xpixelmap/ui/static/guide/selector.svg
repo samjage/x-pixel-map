@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" role="img" aria-labelledby="t">
+  <title id="t">X-T1 selector: Up button and MENU/OK</title>
+  <style>
+    .body { fill: #1e2228; stroke: #9aa3ad; stroke-width: 2; }
+    .key { fill: #171a1f; stroke: #9aa3ad; stroke-width: 1.8; }
+    .accent { fill: #4f9cf9; fill-opacity: .18; stroke: #4f9cf9; stroke-width: 2.6; }
+    .leader { fill: none; stroke: #4f9cf9; stroke-width: 1.4; stroke-dasharray: 3 3; }
+    .dot { fill: #4f9cf9; }
+    text { fill: #e8eaed; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 11px; }
+    .muted { fill: #9aa3ad; font-size: 9.5px; }
+    .lbl { fill: #4f9cf9; font-weight: 650; }
+    .cen { text-anchor: middle; }
+  </style>
+
+  <rect class="body" x="30" y="18" width="122" height="122" rx="16"/>
+
+  <!-- four-way selector -->
+  <rect class="accent" x="79" y="30" width="24" height="24" rx="7"/>
+  <rect class="key" x="79" y="104" width="24" height="24" rx="7"/>
+  <rect class="key" x="43" y="67" width="24" height="24" rx="7"/>
+  <rect class="key" x="115" y="67" width="24" height="24" rx="7"/>
+  <circle class="key" cx="91" cy="79" r="17"/>
+  <text class="cen" x="91" y="76" style="font-size:8.5px">MENU</text>
+  <text class="cen" x="91" y="86" style="font-size:8.5px">OK</text>
+
+  <!-- little up chevron -->
+  <path d="M86 46 L91 41 L96 46" fill="none" stroke="#4f9cf9" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- labels -->
+  <text class="lbl" x="178" y="42">Up</text>
+  <path class="leader" d="M174 39 H105"/>
+  <circle class="dot" cx="105" cy="39" r="2.4"/>
+
+  <text x="178" y="100">MENU / OK</text>
+  <path class="leader" d="M174 97 H110"/>
+  <circle class="dot" cx="110" cy="97" r="2.4"/>
+
+  <text class="muted" x="30" y="172">MENU, then Left, then Up, jumps to the USB menu.</text>
+</svg>
