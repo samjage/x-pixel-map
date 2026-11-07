@@ -86,7 +86,6 @@ for other owners and bodies is open work (an X100T is next; same sensor).
 | `xpixelmap/ui/` | A local guided UI: Pixel mapping, Roll back, Resume, and a History of finished sessions. Timers, step-by-step instructions with drawings, a pixel review viewer, and one-press automatic setup. Opens in an app window (pywebview + GTK WebKit) or in the browser. Plain Python, HTML, CSS and JS; no build step. See `xpixelmap/ui/README.md`. |
 | `tools/capture/` | Shooting and settings tools: dark and white frames over USB (gphoto2), hot-pixel detection, menu-settings and clock backup and restore. |
 | `helper/` | The small shared modules the tools import (hot-pixel detection, defect-list encoding). |
-| `research/` | Written findings of the reverse engineering: where the defect lists live, how the phase-detect fix works, boot and recovery notes. Working logs; they quote decompiler function names, not a camera dump. |
 | `PROCEDURE.md` | The full procedure start to finish, including how to enter and leave service mode safely. |
 
 ## Screenshots
@@ -155,7 +154,7 @@ The tool never ships anyone's camera data. The first run reads your camera once 
 
 ## What is not here
 
-No Fujifilm firmware, config dumps, captures, backups or decompiler output. Those files are Fujifilm's or are private to one camera,
+No Fujifilm firmware, config dumps, captures, backups, decompiler output or research notes (open an issue if you want the notes). Those files are Fujifilm's or are private to one camera,
 so they are not redistributed here. Scanning needs none of them. Before a save, the tool rehearses the write in an emulated camera,
 and that needs Fujifilm's firmware file: update your X-T1 to 5.52, download the same [firmware from Fujifilm](https://fujifilm-x.com/global/support/download/firmware/cameras/x-t1/)
 and choose `FWUP0005.DAT` on the home screen, once. The file is checked by its hash and stays on your computer. Bundled third-party code: `tools/fffw/ff80`
