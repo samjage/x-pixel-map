@@ -122,8 +122,9 @@ From the built-in simulation, which replays saved frames with no camera connecte
 - Windows and macOS are planned. The app window already runs on them; the camera USB layer is Linux-only for now, so the tool will not work there yet.
 
 ```bash
-packaging/linux/install.sh                    # sets up .venv (uv if present, else python -m venv) and adds "X Pixel Map" to your applications menu
-packaging/linux/install.sh --uninstall        # removes the launcher and icon again
+packaging/linux/install.sh                    # installs into ~/.local/share/x-pixel-map and adds "X Pixel Map" to your applications menu
+packaging/linux/make-update.sh                # after changing this checkout: refresh the installed copy, keep its session data
+packaging/linux/install.sh --uninstall        # removes the app folder, the launcher and the icon again
 ```
 
 Or run it by hand:
