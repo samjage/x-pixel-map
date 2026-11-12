@@ -7,7 +7,7 @@ libusb bindings (Arch: `python-gobject`, `webkit2gtk-4.1`, `python-pillow`, `pyt
 
 ```bash
 uv venv --python /usr/bin/python3 --system-site-packages .venv
-uv pip install --python .venv/bin/python numpy pywebview
+uv pip install --python .venv/bin/python numpy pywebview unicorn
 ```
 
 ## Run

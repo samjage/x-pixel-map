@@ -1,6 +1,6 @@
 # X-T1 pixel mapping: the procedure (as run on 2026-11-05)
 
-Everything after "Detect" can repeat for a re-map. Claude runs every command; the owner handles the camera.
+Everything after "Detect" can repeat for a re-map. Commands are run from the computer; the owner handles the camera.
 Each camera write needs the owner's go for that one image. Never `ff80 syslog`, never firmware upload.
 
 ## Camera handling (the owner's exact steps)
@@ -21,7 +21,7 @@ Each camera write needs the owner's go for that one image. Never `ff80 syslog`, 
 4. MENU, press **Up** once to jump straight to the bottom (USB) menu, select USB mode, choose **PC SHOOT AUTO**.
 5. Plug the USB cable back in.
 
-Claude then restores the menu settings and the clock from the PC (step 6 below), so the date entered on the camera does not matter.
+The menu settings and the clock are then restored from the PC (step 6 below), so the date entered on the camera does not matter.
 
 **Dials for test shots:** shutter dial and ISO dial on **A** (the PC sets both, tested 2026-11-06), focus switch **M**, shutter type Mechanical or Mechanical + Electronic, long-exposure NR off.
 

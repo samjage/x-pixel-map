@@ -1,11 +1,23 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
 .venv/
-xpixelmap/data/
+.pytest_cache/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Local camera work: dumps, frames, backups, firmware. Never redistributed.
 camera/
 captures/
-fw/
+xpixelmap/data/
 out/
-*.pdf
-graphify-out/
 research/
+graphify-out/
+
+# Downloaded papers and datasheets
+*.pdf

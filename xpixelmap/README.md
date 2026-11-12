@@ -1,7 +1,8 @@
 # X Pixel Map tool (`xpixelmap`): Fujifilm X defect-list repair (X-T1 fw 5.52)
 
-Python 3 standard library only (the emulated camera additionally needs `unicorn`, which exists only in the
-`xt1-emu:burner` container). Nothing in this tool has ever been run against the real camera.
+Python 3 standard library only for the write path (the emulated camera additionally needs `unicorn`:
+`packaging/linux/install.sh` puts it in `.venv`, or use the `xt1-emu:burner` container). It has been run on the
+real camera: the writes, read-backs and saves in the top-level README's tested session all completed.
 
 ## Safety rules built into the tool
 
@@ -36,6 +37,7 @@ Python 3 standard library only (the emulated camera additionally needs `unicorn`
 ## Usage
 
 ```
+python3 -m xpixelmap firmware FWUP0005.DAT                        # once: firmware for the emulated rehearsal
 python3 -m xpixelmap build --pixel 2497,1861 [--out new.bin]      # new file via helper/edit_lists.py + checks
 python3 -m xpixelmap verify new.bin [--pixel 2497,1861]            # offline checks + emulated round trip (docker)
 python3 -m xpixelmap backup --real                                 # full read, new file, compare with known backup
@@ -74,8 +76,8 @@ instantiated (tripwire on `__new__`, checked by the runner) and no USB module is
 
 ## NOT tested / not covered (real hardware only)
 
-- RealTransport has never run. The USB layer, ffjlib reply formats, error codes, timing of the save response and
-  whether the camera keeps answering reads while it saves are untested. `save_wait` = 10 s is a guess.
+- RealTransport has run on one X-T1 (fw 5.52); a second unit, other firmware, and the timing assumptions
+  (`save_wait` = 10 s, whether the camera keeps answering reads while it saves) are untested.
 - Stubbed in emulation: raw FTL block I/O (each 128 KB block is written whole or not at all; real torn pages,
   bad blocks, ECC and the FTL mount are not modelled), RTOS message posting, the app80 dispatcher (the 0x22
   handler is called directly when the trigger posts 0x1707), the USB transfer itself.

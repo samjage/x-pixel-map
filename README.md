@@ -130,7 +130,7 @@ Or run it by hand:
 
 ```bash
 uv venv --python /usr/bin/python3 --system-site-packages .venv
-uv pip install --python .venv/bin/python numpy pywebview
+uv pip install --python .venv/bin/python numpy pywebview unicorn
 .venv/bin/python -m xpixelmap.ui              # guided UI
 .venv/bin/python -m xpixelmap.ui --browser    # no app window; open the printed address
 ```
