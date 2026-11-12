@@ -43,7 +43,47 @@ def sha12(path):
 
 
 def has_image():
-    return bool(glob.glob(str(BACKUPS / '*backup_*.bin')))
+    return bool(_image_files(BACKUPS))
+
+
+IMAGE_SIZE = 0x420000          # a config image is exactly this big; anything else in the folder is not an image
+
+
+def _image_files(root):
+    """Every config image in the folder, oldest first by file time, whatever it is called.
+
+    The tool writes three kinds, all of the same image: '...-backup_<sha>' (a read-back, the locked proof),
+    '...-save_<sha>' (an image that was written) and '...-restore_<sha>' (a backup put back).
+    Files copied in by hand (a dump from an older date, say) are picked up the same way.
+    """
+    out = []
+    for f in glob.glob(str(root / '*.bin')):
+        try:
+            if os.path.getsize(f) == IMAGE_SIZE: out.append(f)
+        except OSError:
+            pass
+    return sorted(out, key=os.path.getmtime)
+
+
+def _kind(path):
+    n = Path(path).name
+    for k in ('backup', 'save', 'restore'):
+        if f'-{k}_' in n: return k
+    return 'image'
+
+
+def _sha12_of(path):
+    m = re.search(r'_([0-9a-f]{12})\.bin$', Path(path).name)
+    return m.group(1) if m else sha12(path)
+
+
+def _first_sha(files):
+    """Which image is 'Original': the factory hash when it is known, else the oldest read-back."""
+    from xpixelmap.constants import BACKUP_SHA256
+    if BACKUP_SHA256: return BACKUP_SHA256[:12]
+    for f in files:
+        if _kind(f) == 'backup': return _sha12_of(f)
+    return _sha12_of(files[0]) if files else None
 
 
 def camera_image(sess=None):
@@ -275,21 +315,45 @@ def first_backup(sess, p):
 
 
 def backups_list(sess=None):
-    """Every locked image, newest first, one entry per image: name, save date, sha12/sha256, file."""
+    """Every config image in the folder, newest first, one entry per image: name, date, sha12/sha256, file.
+
+    Read-backs, saves, restores and images copied in by hand all count, so nothing that was ever in the
+    folder can be invisible to Roll back. The same image written more than once is one entry, and the
+    read-back file is the one shown, because it is the locked proof of what the camera held."""
     root = (sess.dir / 'sim_backups') if sess is not None and sess.simulate and (sess.dir / 'sim_backups').exists() else BACKUPS
-    files = sorted(glob.glob(str(root / '*backup_*.bin')), key=os.path.getmtime)
-    first = Path(files[0]).name.rsplit('_', 1)[-1][:12] if files else None
+    files = _image_files(root)
+    first = _first_sha(files)
     names = dict(image_names(), **((sess.ctx.get('names') or {}) if sess is not None else {}))
-    out, seen = [], set()
-    for f in reversed(files):
-        s12 = Path(f).name.rsplit('_', 1)[-1][:12]
-        if s12 in seen: continue
-        seen.add(s12)
-        m = re.search(r'(\d{8}T\d{6})Z', Path(f).name)
-        when = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%S').replace(tzinfo=datetime.timezone.utc).astimezone() if m else None
-        out.append({'path': f, 'sha12': s12, 'sha256': hashlib.sha256(Path(f).read_bytes()).hexdigest(),
-                    'name': display_name(s12, names, when, first), 'date': when.strftime('%b %-d, %Y %H:%M') if when else '?'})
+    rank = {'backup': 3, 'save': 2, 'restore': 1, 'image': 0}
+    group = {}
+    for f in files:                                   # oldest first, so the first file of an image is its first sighting
+        group.setdefault(hashlib.sha256(Path(f).read_bytes()).hexdigest(), []).append(f)
+    out = []
+    for s256, fs in group.items():
+        f = max(fs, key=lambda p: rank[_kind(p)])     # show the read-back: it is the locked proof
+        s12 = _sha12_of(f)
+        when = _name_time(fs[0]) or _name_time(f)     # date it first appeared, not the last time it was written
+        out.append({'path': f, 'sha12': s12, 'sha256': s256, 'kind': _kind(f), 'first': _name_time(fs[0]),
+                    'name': image_label(f, s12, names, when, first), 'date': when.strftime('%b %-d, %Y %H:%M') if when else '?',
+                    'mtime': os.path.getmtime(fs[0])})
+    out.sort(key=lambda r: r['mtime'], reverse=True)
+    for r in out: r.pop('mtime')
     return out
+
+
+def _name_time(path):
+    m = re.search(r'(\d{8}T\d{6})Z', Path(path).name)
+    return datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%S').replace(tzinfo=datetime.timezone.utc).astimezone() if m else None
+
+
+def image_label(path, sha, names, when, first=None):
+    """The name a person sees. Read-backs use the 'Original / Edited <date>' naming; a saved or restored
+    file says so, so an image that was written is never called 'Original' by mistake."""
+    kind = _kind(path)
+    if kind == 'backup': return display_name(sha, names, when, first)
+    word = {'save': 'Saved', 'restore': 'Restored'}.get(kind, 'Image')
+    return f'{word} ' + (when.strftime('%b %-d, %H:%M') if when else '')
+
 
 
 def restore_backup(sess, p):

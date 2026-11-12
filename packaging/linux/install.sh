@@ -44,6 +44,13 @@ for sp in "$dst"/.venv/lib/python*/site-packages; do
   [ -d "$sp" ] && echo "$dst" > "$sp/x-pixel-map.pth"
 done
 
+# Your own untouched camera image, if this checkout has one: the tool uses it to recognise the factory
+# image (and to label it 'Original' in Roll back), and the tests need it. It is never copied from anywhere else.
+if [ -f "$root/camera/cfgdata_dump_BACKUP_original.bin" ]; then
+  mkdir -p "$dst/camera"
+  cp -p "$root/camera/cfgdata_dump_BACKUP_original.bin" "$dst/camera/cfgdata_dump_BACKUP_original.bin"
+fi
+
 mkdir -p "$apps" "$icons"
 cp "$here/x-pixel-map.svg" "$icons/x-pixel-map.svg"
 cat > "$apps/x-pixel-map.desktop" <<DESKTOP
