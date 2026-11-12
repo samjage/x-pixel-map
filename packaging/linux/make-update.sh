@@ -36,5 +36,10 @@ else
   exit 1
 fi
 
-echo "Done. Version now installed: $("$dst/.venv/bin/python" -c 'import xpixelmap; print(xpixelmap.__version__)' 2>/dev/null || echo unknown)"
+# Re-assert the path file, in case the environment was rebuilt or this is an older install.
+for sp in "$dst"/.venv/lib/python*/site-packages; do
+  [ -d "$sp" ] && echo "$dst" > "$sp/x-pixel-map.pth"
+done
+
+echo "Done. Version now installed: $(cd "$dst" && .venv/bin/python -c 'import xpixelmap; print(xpixelmap.__version__)' 2>/dev/null || echo unknown)"
 echo "Re-open X Pixel Map from your launcher to use it."

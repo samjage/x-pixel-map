@@ -38,6 +38,12 @@ if [ ! -x "$dst/.venv/bin/python" ]; then
   fi
 fi
 
+# Put the app on that interpreter's path, so "python -m xpixelmap" works from any folder
+# and not only when the current directory happens to be $dst (the launcher sets Path=$dst).
+for sp in "$dst"/.venv/lib/python*/site-packages; do
+  [ -d "$sp" ] && echo "$dst" > "$sp/x-pixel-map.pth"
+done
+
 mkdir -p "$apps" "$icons"
 cp "$here/x-pixel-map.svg" "$icons/x-pixel-map.svg"
 cat > "$apps/x-pixel-map.desktop" <<DESKTOP
